@@ -28,7 +28,7 @@ def load_csv(filepath, newline=''):
     Returns: list from csv file
 
     """
-    with open(filepath, newline='') as f:
+    with open(filepath) as f:
         reader = csv.reader(f)
         data = list(reader)
 
@@ -99,7 +99,7 @@ def save_to_csv(list_of_words, save_file_path, filename):
     """
 
     complete_path = save_file_path + filename 
-    with open(complete_path, 'wb') as myfile:
+    with open(complete_path, 'w') as myfile:
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL,delimiter='\n')
         wr.writerow(list_of_words)
     print("Saved {} to disk".format(filename))

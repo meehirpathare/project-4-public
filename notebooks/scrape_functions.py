@@ -76,7 +76,8 @@ def get_forum_comms(topics_json, lower, upper):
     Returns: saves combined json to disk and prints statement after
     """
     forum = []
-    
+    i = lower
+
     for topic in topics_json:
         start_time = datetime.now()
         thread = topic['topic']
@@ -106,7 +107,7 @@ def get_forum_comms(topics_json, lower, upper):
         
     print("saved {}".format(filename))
 
-def get_page_list(first_url):
+def get_page_list(first_url, last_page):
     """
     Function that makes a list of url strings 
 
@@ -118,26 +119,9 @@ def get_page_list(first_url):
     """
 
     page_list = []
-    for i in range(1, 251):
+    for i in range(1, last_page + 1):
         page_list.append('{}//p{}'.format(first_url, i))
     return page_list
-
-def load_csv(filepath, newline=''):
-    """
-    Function loads csv file to list
-
-    Parameters:
-    filename (str): self-explanatory
-    filepath (str): self-explanatory
-
-    Returns: list from csv file
-
-    """
-    with open(filepath, newline='') as f:
-        reader = csv.reader(f)
-        data = list(reader)
-
-    return data
 
 def make_scrape_list(topics_json, step):
     """
@@ -207,7 +191,7 @@ def page_comments(url):
     comments = []
     
     page = requests.get(url, timeout=100).text
-    soup = BeautifulSoup(page, 'html5')
+    soup = BeautifulSoup(page, 'html5lib')
     
     # initialize all lists 
     dates = []
@@ -261,22 +245,6 @@ def page_comments(url):
             'user_comment_count': user_comment_count[i]
                     })
     return lst  
-
-def save_to_csv(list_of_words, save_file_path, filename):
-    """
-    Function saves list to csv 
-
-    Parameters:
-    list_of_words (list): list object to save to disk
-
-    Returns: saves csv to disk
-    """
-
-    complete_path = save_file_path + filename 
-    with open(complete_path, 'wb') as myfile:
-        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL,delimiter='\n')
-        wr.writerow(list_of_words)
-    print("Saved {} to disk".format(filename))
 
 def thread_comments(url):   
     """
